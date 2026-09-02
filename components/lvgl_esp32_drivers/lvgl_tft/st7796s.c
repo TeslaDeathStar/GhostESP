@@ -22,6 +22,17 @@
  *********************/
 #define TAG "ST7796S"
 
+/* The original ST7796 init table used the 240x320 window from the
+ * ILI9341-era example.  That leaves a 320x480 CYD panel split and causes
+ * LVGL's flushes to wrap into the wrong part of the controller memory.
+ * Keep the init window in step with the selected board profile. */
+#ifndef CONFIG_TFT_WIDTH
+#define CONFIG_TFT_WIDTH CONFIG_LV_HOR_RES_MAX
+#endif
+#ifndef CONFIG_TFT_HEIGHT
+#define CONFIG_TFT_HEIGHT CONFIG_LV_VER_RES_MAX
+#endif
+
 /**********************
  *      TYPEDEFS
  **********************/
@@ -75,8 +86,8 @@ void st7796s_init(void)
 		{0x26, {0x01}, 1},
 		{0xE0, {0x1F, 0x1A, 0x18, 0x0A, 0x0F, 0x06, 0x45, 0X87, 0x32, 0x0A, 0x07, 0x02, 0x07, 0x05, 0x00}, 15},
 		{0XE1, {0x00, 0x25, 0x27, 0x05, 0x10, 0x09, 0x3A, 0x78, 0x4D, 0x05, 0x18, 0x0D, 0x38, 0x3A, 0x1F}, 15},
-		{0x2A, {0x00, 0x00, 0x00, 0xEF}, 4},
-		{0x2B, {0x00, 0x00, 0x01, 0x3f}, 4},
+		{0x2A, {0x00, 0x00, (CONFIG_TFT_WIDTH - 1) >> 8, (CONFIG_TFT_WIDTH - 1) & 0xFF}, 4},
+		{0x2B, {0x00, 0x00, (CONFIG_TFT_HEIGHT - 1) >> 8, (CONFIG_TFT_HEIGHT - 1) & 0xFF}, 4},
 		{0x2C, {0}, 0},
 		{0xB7, {0x07}, 1},
 		{0xB6, {0x0A, 0x82, 0x27, 0x00}, 4},
