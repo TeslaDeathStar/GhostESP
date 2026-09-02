@@ -620,8 +620,21 @@ def build_target(target: Dict[str, str], env: Dict[str, str], cmd_prefix: str = 
         print(f"Copying {target['sdkconfig_file']} to sdkconfig and sdkconfig.defaults...")
         # Copy config file to both locations
         try:
-            shutil.copy2(target['sdkconfig_file'], "sdkconfig.defaults")
-            shutil.copy2(target['sdkconfig_file'], "sdkconfig")
+            # Board profiles added as overlays inherit the complete generic
+            # baseline so core features (Wi-Fi/BLE/LVGL) are not silently
+            # disabled by a small pin-only config file.
+            if target['name'] == 'CYD40_ST7796':
+                base_config = os.path.join('configs', 'sdkconfig.default.esp32')
+                with open(base_config, 'r', encoding='utf-8') as base_file:
+                    base_contents = base_file.read()
+                with open(target['sdkconfig_file'], 'r', encoding='utf-8') as overlay_file:
+                    overlay_contents = overlay_file.read()
+                with open("sdkconfig.defaults", 'w', encoding='utf-8') as merged_file:
+                    merged_file.write(base_contents.rstrip() + "\n\n" + overlay_contents)
+                shutil.copy2("sdkconfig.defaults", "sdkconfig")
+            else:
+                shutil.copy2(target['sdkconfig_file'], "sdkconfig.defaults")
+                shutil.copy2(target['sdkconfig_file'], "sdkconfig")
         except Exception as e:
             print(f"ERROR: Failed to copy config file: {e}")
             return False
