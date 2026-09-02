@@ -8,7 +8,7 @@
 [![License](https://img.shields.io/badge/license-GPL--3.0-blue?style=flat-square)](LICENSE)
 [![ESP-IDF](https://img.shields.io/badge/ESP--IDF-v6.0-orange?style=flat-square)](https://docs.espressif.com/projects/esp-idf/)
 [![Discord](https://img.shields.io/discord/5cyNmUMgwh?style=flat-square&label=Discord&color=5865F2)](https://discord.gg/5cyNmUMgwh)
-[![Boards](https://img.shields.io/badge/board%20targets-46-2ea043?style=flat-square)](#supported-boards)
+[![Boards](https://img.shields.io/badge/board%20targets-47-2ea043?style=flat-square)](#supported-boards)
 
 **⭐️ Enjoying GhostESP? Please give the repo a star. It helps a lot.**
 
@@ -258,7 +258,7 @@ A few things set GhostESP apart from every other ESP32 firmware:
 
 ## Supported Boards
 
-46 board targets build in CI ([`.github/workflows/compile_all.yml`](.github/workflows/compile_all.yml)) from 45 configs in [`configs/`](configs/); Awok V5 shares the generic ESP32-S2 config. Feature support below is derived from those configs.
+47 board targets build in CI ([`.github/workflows/compile_all.yml`](.github/workflows/compile_all.yml)) from 46 configs in [`configs/`](configs/); Awok V5 shares the generic ESP32-S2 config. Feature support below is derived from those configs.
 
 <details>
 <summary><strong>Board feature matrix (click to expand)</strong></summary>
@@ -284,6 +284,7 @@ A few things set GhostESP apart from every other ESP32 firmware:
 | CYD2 USB 2.4" | ✓ | ✗ | ✓ | ✗ | ✗ | ✗ | ✗ | Full | ✓ | ✗ | ✗ |
 | CYD2 USB 2.4" (C variant) | ✓ | ✗ | ✓ | ✗ | ✗ | ✗ | ✗ | Full | ✓ | ✗ | ✗ |
 | CYD 2432S028R | ✓ | ✗ | ✓ | ✗ | ✗ | ✗ | ✗ | Full | ✓ | ✗ | ✗ |
+| CYD 4.0" ST7796 (E32R40T) | ✓ | ✗ | ✓ | ✗ | ✗ | ✗ | ✗ | Full | ✓ | ✗ | ✗ |
 | Waveshare 7" Touch | ✓ | ✗ | ✓* | ✗ | ✗ | ✗ | ✗ | Full | ✓ | ✓ | ✓ |
 | Crowtech 7" | ✓ | ✗ | ✓* | ✗ | ✗ | ✗ | ✗ | Full | ✗ | ✗ | ✓ |
 | Sunton 7" | ✓ | ✗ | ✓* | ✗ | ✗ | ✗ | ✗ | Full | ✗ | ✓ | ✓ |

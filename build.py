@@ -37,12 +37,13 @@ def print_banner():
     print("       +======================================+")
     print()
 
-def download_esp_idf(version: str = "5.5.1") -> Optional[str]:
+def download_esp_idf(version: str = "6.1") -> Optional[str]:
     """Download and extract ESP-IDF"""
     print(f"\nDownloading ESP-IDF v{version}...")
     
     # ESP-IDF download URLs
     urls = {
+        "6.1": "https://github.com/espressif/esp-idf/releases/download/v6.1/esp-idf-v6.1.zip",
         "5.5.1": "https://github.com/espressif/esp-idf/releases/download/v5.5.1/esp-idf-v5.5.1.zip",
         "5.5": "https://github.com/espressif/esp-idf/releases/download/v5.5/esp-idf-v5.5.zip",
         "5.4.1": "https://github.com/espressif/esp-idf/releases/download/v5.4.1/esp-idf-v5.4.1.zip"
@@ -174,8 +175,10 @@ def find_esp_idf(auto_download: bool = False) -> Optional[str]:
             r"C:\Program Files (x86)\esp-idf",
             r"C:\tools\esp-idf",
             # r"S:\Espressif\frameworks\esp-idf-v5.5",
+            r"C:\esp\esp-idf-v6.1",
             r"C:\esp\esp-idf-v5.5",
             r"C:\esp\esp-idf-v5.4.1",
+            os.path.join(script_dir, "esp-idf-v6.1"),
             os.path.join(script_dir, "esp-idf-v5.5"),
             os.path.join(script_dir, "esp-idf-v5.4.1"),
             os.path.join(script_dir, "esp-idf")
@@ -192,8 +195,11 @@ def find_esp_idf(auto_download: bool = False) -> Optional[str]:
             "/opt/espressif/esp-idf",
             f"{home}/esp/esp-idf-v5.5",
             f"{home}/esp/esp-idf-v5.4.1",
+            f"{home}/esp/esp-idf-v6.1",
+            f"{home}/esp/v6.1/esp-idf",
             f"{home}/esp/v5.5/esp-idf",
             f"{home}/esp/v5.4.1/esp-idf",
+            os.path.join(script_dir, "esp-idf-v6.1"),
             os.path.join(script_dir, "esp-idf-v5.5"),
             os.path.join(script_dir, "esp-idf-v5.4.1"),
             os.path.join(script_dir, "esp-idf")
@@ -245,18 +251,21 @@ def find_esp_idf(auto_download: bool = False) -> Optional[str]:
     if auto_download:
         print("\nESP-IDF not found. Would you like to download it automatically?")
         print("Available versions:")
-        print("  1. ESP-IDF v5.5.1 (recommended)")
-        print("  2. ESP-IDF v5.4.1")
-        print("  3. Manual path input")
-        print("  4. Exit")
+        print("  1. ESP-IDF v6.1 (recommended for this GhostESP source)")
+        print("  2. ESP-IDF v5.5.1")
+        print("  3. ESP-IDF v5.4.1")
+        print("  4. Manual path input")
+        print("  5. Exit")
         
-        choice = input("Enter your choice (1-4): ").strip()
+        choice = input("Enter your choice (1-5): ").strip()
         
         if choice == '1':
-            return download_esp_idf("5.5.1")
+            return download_esp_idf("6.1")
         elif choice == '2':
-            return download_esp_idf("5.4.1")
+            return download_esp_idf("5.5.1")
         elif choice == '3':
+            return download_esp_idf("5.4.1")
+        elif choice == '4':
             pass  # Fall through to manual input
         else:
             print("Exiting build script.")
@@ -275,7 +284,11 @@ def find_esp_idf(auto_download: bool = False) -> Optional[str]:
         print("Example: /opt/esp-idf")
     print()
     
-    custom_path = input("ESP-IDF Path (or press Enter to exit): ").strip()
+    try:
+        custom_path = input("ESP-IDF Path (or press Enter to exit): ").strip()
+    except EOFError:
+        print("No ESP-IDF path was provided; exiting build script.")
+        return None
     if not custom_path:
         print("Exiting build script.")
         return None
@@ -289,7 +302,8 @@ def validate_esp_idf(idf_path: str) -> bool:
     
     if not os.path.exists(export_path):
         print(f"ERROR: Invalid ESP-IDF path. {export_script} not found in {idf_path}")
-        print("Please ensure you have ESP-IDF v5.5.1 (recommended) or v5.4.1 installed.")
+        print("Please ensure you have ESP-IDF v6.1 (recommended), v5.5.1, or v5.4.1 installed.")
+        print("Download v6.1: https://github.com/espressif/esp-idf/releases/tag/v6.1")
         print("Download v5.5.1: https://github.com/espressif/esp-idf/releases/tag/v5.5.1")
         print("Download v5.4.1: https://github.com/espressif/esp-idf/releases/tag/v5.4.1")
         return False
@@ -375,6 +389,7 @@ def get_build_targets() -> List[Dict[str, str]]:
         {"name": "CYD2USB2.4_Inch", "idf_target": "esp32", "sdkconfig_file": "configs/sdkconfig.CYD2USB2.4Inch", "zip_name": "CYD2USB2.4Inch.zip"},
         {"name": "CYD2USB2.4_Inch_C", "idf_target": "esp32", "sdkconfig_file": "configs/sdkconfig.CYD2USB2.4Inch_C_Varient", "zip_name": "CYD2USB2.4Inch_C.zip"},
         {"name": "CYD2432S028R", "idf_target": "esp32", "sdkconfig_file": "configs/sdkconfig.CYD2432S028R", "zip_name": "CYD2432S028R.zip"},
+        {"name": "CYD40_ST7796", "idf_target": "esp32", "sdkconfig_file": "configs/sdkconfig.CYD40_ST7796", "zip_name": "CYD40_ST7796.zip"},
         {"name": "Waveshare_LCD", "idf_target": "esp32s3", "sdkconfig_file": "configs/sdkconfig.waveshare7inch", "zip_name": "Waveshare_LCD.zip"},
         {"name": "Crowtech_LCD", "idf_target": "esp32s3", "sdkconfig_file": "configs/sdkconfig.crowtech7inch", "zip_name": "Crowtech_LCD.zip"},
         {"name": "Sunton_LCD", "idf_target": "esp32s3", "sdkconfig_file": "configs/sdkconfig.sunton7inch", "zip_name": "Sunton_LCD.zip"},
